@@ -1,0 +1,43 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Solicitud {
+  id                  Int               @id @default(autoincrement())
+  idSolicitud         String            @unique @map("id_solicitud") @db.VarChar(50)
+  fecha               String?           @db.VarChar(50)
+  canal               String?           @db.VarChar(100)
+  tipoCliente         String?           @map("tipo_cliente") @db.VarChar(100)
+  nombreCliente       String?           @map("nombre_cliente") @db.VarChar(255)
+  mensaje             String            @db.Text
+  prioridadReportada  String?           @map("prioridad_reportada") @db.VarChar(20)
+  categoria           String?           @db.VarChar(100)
+  prioridadFinal      String?           @map("prioridad_final") @db.VarChar(20)
+  resumen             String?           @db.Text
+  datosExtraidos      Json?             @map("datos_extraidos")
+  respuestaSugerida   String?           @map("respuesta_sugerida") @db.Text
+  estadoProcesamiento String            @map("estado_procesamiento") @db.VarChar(50)
+  razonFallo          String?           @map("razon_fallo") @db.Text
+  fechaProcesamiento  DateTime          @default(now()) @map("fecha_procesamiento")
+
+  @@map("solicitudes")
+}
+
+model LogProcesamiento {
+  id            Int       @id @default(autoincrement())
+  idSolicitud    String    @map("id_solicitud") @db.VarChar(50)
+  timestamp      DateTime  @default(now())
+  nivel          String    @db.VarChar(10)
+  etapa          String    @db.VarChar(50)
+  mensaje        String    @db.Text
+  promptEnviado  String?   @map("prompt_enviado") @db.Text
+  respuestaRaw   String?   @map("respuesta_raw") @db.Text
+  intento        Int?
+
+  @@map("logs_procesamiento")
+}

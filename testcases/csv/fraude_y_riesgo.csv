@@ -1,0 +1,5 @@
+id_solicitud,fecha,canal,tipo_cliente,nombre_cliente,mensaje,prioridad_reportada
+TC-F01,2026-06-08,WhatsApp,cliente final,Pedro Ramírez,Hola buenos días me llegaron tres cobros que yo no autoricé por valores de $450.000 cada uno. Necesito que los bloqueen urgente porque siguen saliendo cargos.,baja
+TC-F02,2026-06-08,API,comercio,Supermercado Central,Detectamos acceso no autorizado a nuestra cuenta de TUMIPAY. Alguien realizó 8 transacciones de alto valor en los últimos 20 minutos sin nuestra autorización. Solicitud urgente de bloqueo total.,baja
+TC-F03,2026-06-08,correo,comercio,Droguería La Salud,Nuestros clientes están reportando que se les cobró dos veces el mismo pago. Ya contamos 12 transacciones duplicadas desde las 9am. Necesitamos reversar todo y bloquear nuevos cobros.,media
+TC-F04,2026-06-08,formulario,cliente final,Lucía Herrera,Me robaron el teléfono y creo que están usando mi cuenta de TUMIPAY. Ya vi movimientos que no reconozco por más de $200.000. Por favor bloqueen mi cuenta de inmediato.,baja

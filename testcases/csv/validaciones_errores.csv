@@ -1,0 +1,6 @@
+id_solicitud,fecha,canal,tipo_cliente,nombre_cliente,mensaje,prioridad_reportada
+TC-V01,2026-06-08,correo,comercio,Tienda Válida,Esta es una solicitud válida que debe procesarse correctamente.,media
+,2026-06-08,WhatsApp,cliente final,Sin ID,Este registro no tiene id_solicitud y debe marcarse como fallido.,baja
+TC-V03,2026-06-08,API,comercio,Sin Mensaje,,alta
+TC-V04,2026-06-08,formulario,aliado,Prioridad Inválida,Solicitud con prioridad fuera del catálogo permitido.,urgente
+TC-V05,2026-06-08,correo,interno,Equipo QA,Esta solicitud es válida y debe clasificarse correctamente. Necesitamos acceso al módulo de reportes para el equipo de calidad.,baja

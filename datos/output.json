@@ -1,0 +1,141 @@
+{
+  "resumen": {
+    "total_procesadas": 7,
+    "total_revision_manual": 2,
+    "total_fallidas": 1
+  },
+  "solicitudes": [
+    {
+      "id_solicitud": "SOL-008",
+      "categoria": null,
+      "prioridad_final": null,
+      "resumen": null,
+      "datos_extraidos": {},
+      "respuesta_sugerida": null,
+      "estado_procesamiento": "fallida",
+      "fecha_procesamiento": "2026-06-04T19:44:00.287Z"
+    },
+    {
+      "id_solicitud": "SOL-001",
+      "categoria": "Soporte técnico",
+      "prioridad_final": "Alta",
+      "resumen": "Error 503 al acceder al portal de pagos",
+      "datos_extraidos": {
+        "tipo_de_error": "Error 503",
+        "fecha_de_inicio": "Ayer",
+        "tipo_de_cliente": "Comercio",
+        "nombre_del_comercio": "Supermercado La 14"
+      },
+      "respuesta_sugerida": "Estimado Supermercado La 14, \nme dirijo a usted para confirmar que recibimos su reporte sobre el error 503 al acceder al portal de pagos y lo estamos atendiendo de inmediato. Debido a que la prioridad de su caso es Alta, es urgente y un técnico lo contactará en menos de 1 hora para resolver el problema. Mientras tanto, le sugiero intentar reiniciar la sesión y limpiar el caché para ver si se resuelve el error. Si necesita seguir el progreso de su caso, puede comunicarse con nosotros al +57 1234567. Agradezco su paciencia y colaboración.",
+      "estado_procesamiento": "procesada",
+      "fecha_procesamiento": "2026-06-04T19:44:00.395Z"
+    },
+    {
+      "id_solicitud": "SOL-002",
+      "categoria": "Actualización de datos",
+      "prioridad_final": "Media",
+      "resumen": "Actualización de datos de contacto del cliente",
+      "datos_extraidos": {
+        "nombre": "María Torres",
+        "tipo_de_cliente": "cliente final",
+        "datos_a_actualizar": [
+          "número de teléfono",
+          "correo electrónico"
+        ]
+      },
+      "respuesta_sugerida": "Hola María, gracias por contactarnos a través de WhatsApp. Acabamos de recibir tu solicitud de actualización de datos y queremos confirmarte que iniciaremos el proceso de verificación de identidad para garantizar la seguridad de tus información. Recibirás un correo o mensaje con instrucciones para validar tu identidad, y una vez completado este paso, aplicaremos los cambios en un plazo de 1 a 2 días hábiles. Estamos comprometidos con la protección de tus datos y te aseguramos que todo el proceso se llevará a cabo de manera segura y confidencial.",
+      "estado_procesamiento": "procesada",
+      "fecha_procesamiento": "2026-06-04T19:44:03.000Z"
+    },
+    {
+      "id_solicitud": "SOL-003",
+      "categoria": "Riesgo / fraude",
+      "prioridad_final": "Alta",
+      "resumen": "El comercio Restaurante El Patio detectó transacciones no reconocidas y solicita bloqueo de pagos",
+      "datos_extraidos": {
+        "nombre_comercio": "Restaurante El Patio",
+        "tipo_transaccion": "transacciones desconocidas",
+        "accion_solicitada": "bloqueo de pagos"
+      },
+      "respuesta_sugerida": "Estimado Restaurante El Patio, gracias por reportar de inmediato las transacciones no reconocidas. Recibimos su reporte de seguridad y lo escalamos de inmediato al equipo de fraude para tomar medidas preventivas. Ya hemos bloqueado su cuenta para evitar movimientos adicionales, por lo que le solicitamos que no realice ninguna transacción hasta que nuestro equipo lo confirme. Un especialista en seguridad lo contactará en menos de 30 minutos para asistirlo. Mientras tanto, si necesita asistencia urgente, puede comunicarse con nuestra línea de fraudes disponible 24/7.",
+      "estado_procesamiento": "procesada",
+      "fecha_procesamiento": "2026-06-04T19:44:04.864Z"
+    },
+    {
+      "id_solicitud": "SOL-004",
+      "categoria": "Solicitud comercial",
+      "prioridad_final": "Media",
+      "resumen": "Solicitud de información sobre planes de comisiones para nuevos aliados comerciales",
+      "datos_extraidos": {
+        "tipo_de_cliente": "aliado",
+        "nombre": "Distribuidora Norte",
+        "informacion_solicitada": "planes de comisiones"
+      },
+      "respuesta_sugerida": "Estimado equipo de Distribuidora Norte, agradezco su interés en los servicios de TUMIPAY y confirmo que recibimos su consulta comercial sobre planes de comisiones para nuevos aliados comerciales. Un ejecutivo comercial se pondrá en contacto con ustedes en las próximas 24 horas hábiles para presentar opciones personalizadas que se adapten a sus necesidades, destacando nuestras soluciones de pago digitales, integración por API y planes diseñados específicamente para aliados como ustedes. Le invitamos a preparar cualquier pregunta o inquietud que tengan para discutir durante la reunión, con el fin de asegurarnos de que encontramos la mejor solución para su negocio. Estamos emocionados de explorar cómo TUMIPAY puede apoyar el crecimiento de Distribuidora Norte.",
+      "estado_procesamiento": "procesada",
+      "fecha_procesamiento": "2026-06-04T19:44:06.943Z"
+    },
+    {
+      "id_solicitud": "SOL-005",
+      "categoria": null,
+      "prioridad_final": null,
+      "resumen": null,
+      "datos_extraidos": {},
+      "respuesta_sugerida": null,
+      "estado_procesamiento": "requiere_revision_manual",
+      "fecha_procesamiento": "2026-06-04T19:44:08.973Z"
+    },
+    {
+      "id_solicitud": "SOL-006",
+      "categoria": "Otro / requiere revisión manual",
+      "prioridad_final": "Baja",
+      "resumen": "El cliente Carlos Mendoza se comunica sin especificar el motivo de su llamada",
+      "datos_extraidos": {
+        "nombre": "Carlos Mendoza",
+        "canal": "WhatsApp"
+      },
+      "respuesta_sugerida": "Hola Carlos, gracias por comunicarte con nosotros, recibimos tu mensaje y un agente se pondrá en contacto contigo pronto para entender mejor tu solicitud. Si puedes, nos sería de gran ayuda que nos cuentes un poco más sobre lo que necesitas para agilizar tu atención. Estamos aquí para ayudarte, ¡gracias por tu paciencia!",
+      "estado_procesamiento": "procesada",
+      "fecha_procesamiento": "2026-06-04T19:44:11.875Z"
+    },
+    {
+      "id_solicitud": "SOL-007",
+      "categoria": "Soporte técnico",
+      "prioridad_final": "Media",
+      "resumen": "Solicitud de acceso al ambiente de staging para pruebas de integración del nuevo módulo de pagos",
+      "datos_extraidos": {
+        "tipo_de_cliente": "interno",
+        "nombre": "Equipo TI",
+        "canal": "correo",
+        "tipo_de_solicitud": "acceso al ambiente de staging"
+      },
+      "respuesta_sugerida": "Estimado Equipo TI, gracias por contactarnos a través del correo. Recibimos su solicitud de acceso al ambiente de staging para pruebas de integración del nuevo módulo de pagos y estamos trabajando en ello. Dado que la prioridad de su solicitud es Media, esperamos resolverla en un plazo de 4 a 8 horas hábiles. Mientras tanto, puede intentar reiniciar su sesión y limpiar el caché para asegurarse de que no haya problemas de conexión. Para cualquier seguimiento, por favor comuníquese con nosotros al +57 1234567 o a través de nuestro correo de soporte.",
+      "estado_procesamiento": "procesada",
+      "fecha_procesamiento": "2026-06-04T19:44:13.833Z"
+    },
+    {
+      "id_solicitud": "SOL-009",
+      "categoria": null,
+      "prioridad_final": null,
+      "resumen": null,
+      "datos_extraidos": {},
+      "respuesta_sugerida": null,
+      "estado_procesamiento": "requiere_revision_manual",
+      "fecha_procesamiento": "2026-06-04T19:44:15.867Z"
+    },
+    {
+      "id_solicitud": "SOL-010",
+      "categoria": "Conciliación / pagos",
+      "prioridad_final": "Alta",
+      "resumen": "El Hotel Campestre está recibiendo pagos duplicados a través de TUMIPAY",
+      "datos_extraidos": {
+        "cantidad_transacciones": 15,
+        "tipo_transacciones": "pagos duplicados",
+        "tiempo_transacciones": "última hora"
+      },
+      "respuesta_sugerida": "Estimado Hotel Campestre, gracias por reportar la discrepancia en pagos a través de TUMIPAY. Confirmamos que recibimos su reporte y, debido a la prioridad alta de este caso, hemos escalado el asunto y lo revisaremos en menos de 2 horas. Para agilizar el proceso, le solicitamos que tenga a mano el número de referencia, la fecha de la transacción y el comprobante si lo tiene. Nuestro equipo de conciliación se pondrá en contacto con usted pronto para resolver esta situación de manera eficiente.",
+      "estado_procesamiento": "procesada",
+      "fecha_procesamiento": "2026-06-04T19:44:19.182Z"
+    }
+  ]
+}

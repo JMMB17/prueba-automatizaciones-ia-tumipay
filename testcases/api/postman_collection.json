@@ -1,0 +1,172 @@
+{
+  "info": {
+    "name": "TUMIPAY — Prueba Técnica",
+    "description": "Casos de prueba para el API REST de TUMIPAY. Importar en Postman: File → Import → seleccionar este archivo.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:3000",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Procesamiento",
+      "item": [
+        {
+          "name": "Fraude — prioridad reportada baja, sistema asigna Alta",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{base_url}}/api/solicitudes", "host": ["{{base_url}}"], "path": ["api", "solicitudes"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id_solicitud\": \"TC-API-01\",\n  \"fecha\": \"2026-06-08\",\n  \"canal\": \"API\",\n  \"tipo_cliente\": \"cliente final\",\n  \"nombre_cliente\": \"Pedro Ramírez\",\n  \"mensaje\": \"Me llegaron tres cobros que no autoricé por $450.000 cada uno. Siguen saliendo cargos. Necesito bloqueo urgente.\",\n  \"prioridad_reportada\": \"baja\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Conciliación — prioridad reportada baja, sistema asigna Alta",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{base_url}}/api/solicitudes", "host": ["{{base_url}}"], "path": ["api", "solicitudes"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id_solicitud\": \"TC-API-02\",\n  \"fecha\": \"2026-06-08\",\n  \"canal\": \"formulario\",\n  \"tipo_cliente\": \"comercio\",\n  \"nombre_cliente\": \"Farmacia Salud Total\",\n  \"mensaje\": \"El pago con referencia TMP-4421 no aparece en nuestro extracto. Ya pasaron 3 días hábiles y el cliente tiene el comprobante como exitoso.\",\n  \"prioridad_reportada\": \"baja\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Solo campos obligatorios",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{base_url}}/api/solicitudes", "host": ["{{base_url}}"], "path": ["api", "solicitudes"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id_solicitud\": \"TC-API-03\",\n  \"mensaje\": \"Quiero saber cómo integrar TUMIPAY en mi tienda online.\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Soporte técnico — error de acceso",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{base_url}}/api/solicitudes", "host": ["{{base_url}}"], "path": ["api", "solicitudes"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id_solicitud\": \"TC-API-04\",\n  \"fecha\": \"2026-06-08\",\n  \"canal\": \"correo\",\n  \"tipo_cliente\": \"comercio\",\n  \"nombre_cliente\": \"Supermercado Central\",\n  \"mensaje\": \"El portal de pagos no carga desde hace 2 horas. Aparece error 502. Tenemos clientes esperando y no podemos procesar ningún cobro.\",\n  \"prioridad_reportada\": \"alta\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Actualización de datos",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{base_url}}/api/solicitudes", "host": ["{{base_url}}"], "path": ["api", "solicitudes"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id_solicitud\": \"TC-API-05\",\n  \"fecha\": \"2026-06-08\",\n  \"canal\": \"WhatsApp\",\n  \"tipo_cliente\": \"cliente final\",\n  \"nombre_cliente\": \"Camila Ortiz\",\n  \"mensaje\": \"Necesito actualizar mi número de celular y correo electrónico. El teléfono que tengo registrado ya no existe.\",\n  \"prioridad_reportada\": \"baja\"\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Validaciones — deben retornar HTTP 400",
+      "item": [
+        {
+          "name": "Error — mensaje vacío",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{base_url}}/api/solicitudes", "host": ["{{base_url}}"], "path": ["api", "solicitudes"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id_solicitud\": \"TC-ERR-01\",\n  \"mensaje\": \"\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Error — id_solicitud faltante",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{base_url}}/api/solicitudes", "host": ["{{base_url}}"], "path": ["api", "solicitudes"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"mensaje\": \"Solicitud sin identificador.\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Error — prioridad fuera del catálogo",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{base_url}}/api/solicitudes", "host": ["{{base_url}}"], "path": ["api", "solicitudes"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id_solicitud\": \"TC-ERR-02\",\n  \"mensaje\": \"Solicitud con prioridad inválida.\",\n  \"prioridad_reportada\": \"urgente\"\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Consultas",
+      "item": [
+        {
+          "name": "GET — listar todas",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/api/solicitudes", "host": ["{{base_url}}"], "path": ["api", "solicitudes"] }
+          }
+        },
+        {
+          "name": "GET — filtrar procesadas",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/solicitudes?estado=procesada",
+              "host": ["{{base_url}}"],
+              "path": ["api", "solicitudes"],
+              "query": [{ "key": "estado", "value": "procesada" }]
+            }
+          }
+        },
+        {
+          "name": "GET — filtrar revision manual",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/solicitudes?estado=requiere_revision_manual",
+              "host": ["{{base_url}}"],
+              "path": ["api", "solicitudes"],
+              "query": [{ "key": "estado", "value": "requiere_revision_manual" }]
+            }
+          }
+        },
+        {
+          "name": "GET — buscar por ID",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/api/solicitudes/TC-API-01", "host": ["{{base_url}}"], "path": ["api", "solicitudes", "TC-API-01"] }
+          }
+        },
+        {
+          "name": "GET — ID inexistente (debe retornar 404)",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/api/solicitudes/NO-EXISTE-999", "host": ["{{base_url}}"], "path": ["api", "solicitudes", "NO-EXISTE-999"] }
+          }
+        }
+      ]
+    }
+  ]
+}

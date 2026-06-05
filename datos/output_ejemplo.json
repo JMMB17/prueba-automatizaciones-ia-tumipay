@@ -1,0 +1,56 @@
+{
+  "resumen": {
+    "total_procesadas": 2,
+    "total_revision_manual": 1,
+    "total_fallidas": 1
+  },
+  "solicitudes": [
+    {
+      "id_solicitud": "SOL-001",
+      "categoria": "Riesgo / fraude",
+      "prioridad_final": "Alta",
+      "resumen": "El comercio detectó transacciones no reconocidas con valores altos y solicita bloqueo urgente de pagos",
+      "datos_extraidos": {
+        "tipo_transaccion": "transacciones no reconocidas",
+        "accion_solicitada": "bloqueo urgente"
+      },
+      "respuesta_sugerida": "Estimado cliente, recibimos su reporte de seguridad y fue escalado de inmediato al equipo de fraude. El equipo iniciará el proceso de bloqueo preventivo de su cuenta para evitar movimientos adicionales, por lo que le pedimos que no realice ninguna transacción hasta recibir confirmación. Un especialista en seguridad lo contactará en menos de 30 minutos. Puede responder por este mismo canal si necesita asistencia inmediata.",
+      "estado_procesamiento": "procesada",
+      "fecha_procesamiento": "2026-06-01T14:30:00.000Z"
+    },
+    {
+      "id_solicitud": "SOL-002",
+      "categoria": "Conciliación / pagos",
+      "prioridad_final": "Alta",
+      "resumen": "Transferencia exitosa según comprobante pero el destinatario no recibió el dinero después de 3 días",
+      "datos_extraidos": {
+        "tipo_transaccion": "transferencia",
+        "estado_comprobante": "exitoso",
+        "dias_transcurridos": 3
+      },
+      "respuesta_sugerida": "Estimada cliente, confirmamos que recibimos su reporte de discrepancia en pagos. Debido a la prioridad alta, hemos escalado el asunto y lo revisaremos en menos de 2 horas. Para agilizar el proceso, le solicitamos que tenga a mano el número de referencia, la fecha de la transacción y el comprobante si lo tiene disponible.",
+      "estado_procesamiento": "procesada",
+      "fecha_procesamiento": "2026-06-01T14:31:00.000Z"
+    },
+    {
+      "id_solicitud": "SOL-003",
+      "categoria": null,
+      "prioridad_final": null,
+      "resumen": null,
+      "datos_extraidos": {},
+      "respuesta_sugerida": null,
+      "estado_procesamiento": "requiere_revision_manual",
+      "fecha_procesamiento": "2026-06-01T14:32:00.000Z"
+    },
+    {
+      "id_solicitud": "SOL-004",
+      "categoria": null,
+      "prioridad_final": null,
+      "resumen": null,
+      "datos_extraidos": {},
+      "respuesta_sugerida": null,
+      "estado_procesamiento": "fallida",
+      "fecha_procesamiento": "2026-06-01T14:32:00.000Z"
+    }
+  ]
+}

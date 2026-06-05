@@ -1,0 +1,7 @@
+id_solicitud,fecha,canal,tipo_cliente,nombre_cliente,mensaje,prioridad_reportada
+TC-C01,2026-06-08,correo,comercio,Restaurante Sabor,El portal de pagos no carga desde hace 2 horas. Aparece un error 502. Tenemos clientes esperando y no podemos procesar ningún cobro.,alta
+TC-C02,2026-06-08,formulario,aliado,Distribuidora Éxito,Quiero conocer las tarifas y condiciones para integrar TUMIPAY como método de pago en mis 5 sucursales. Somos una empresa mediana con alto volumen de ventas.,
+TC-C03,2026-06-08,API,comercio,Hotel Boutique Zen,Un cliente reportó transacciones no reconocidas en su tarjeta asociada a pagos en nuestro establecimiento. Solicitamos revisión inmediata y posible bloqueo preventivo.,baja
+TC-C04,2026-06-08,WhatsApp,cliente final,Camila Ortiz,El pago que hice ayer por $85.000 con referencia TMP-9921 aparece como exitoso en mi app pero el comercio dice que no les llegó nada. Ya pasó más de 24 horas.,media
+TC-C05,2026-06-08,correo,cliente final,Juan Sebastián Mora,Necesito actualizar mi número de celular y mi correo electrónico en la plataforma. El teléfono que tengo registrado ya no existe.,baja
+TC-C06,2026-06-08,WhatsApp,cliente final,Valentina Cruz,hola quería preguntar algo sobre mi cuenta,

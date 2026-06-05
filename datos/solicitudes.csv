@@ -1,0 +1,11 @@
+id_solicitud,fecha,canal,tipo_cliente,nombre_cliente,mensaje,prioridad_reportada
+SOL-001,2026-06-01,correo,comercio,Supermercado La 14,No puedo acceder al portal de pagos desde ayer. Me aparece error 503 cada vez que intento ingresar.,media
+SOL-002,2026-06-01,WhatsApp,cliente final,María Torres,Quiero actualizar mi número de teléfono y correo electrónico registrados en la plataforma.,baja
+SOL-003,2026-06-01,API,comercio,Restaurante El Patio,Detecté transacciones que no reconozco por valores altos en mi cuenta. Necesito bloqueo urgente de mis pagos.,baja
+SOL-004,2026-06-02,formulario,aliado,Distribuidora Norte,Necesito información sobre los planes de comisiones disponibles para nuevos aliados comerciales.,
+SOL-005,2026-06-02,correo,comercio,Farmacia Salud Total,El pago del cliente con referencia #78432 no aparece conciliado en mi extracto del 30 de mayo. Ya pasaron 3 días.,alta
+SOL-006,2026-06-02,WhatsApp,cliente final,Carlos Mendoza,hola buenas me dijeron que hablara aqui,baja
+SOL-007,2026-06-03,correo,interno,Equipo TI,Solicitud de acceso al ambiente de staging para pruebas de integración del nuevo módulo de pagos.,media
+SOL-008,2026-06-03,API,comercio,Tienda Online XYZ,,media
+SOL-009,2026-06-03,formulario,cliente final,Ana Gómez,Realicé una transferencia hace 3 días y el dinero no ha llegado. El comprobante dice exitoso pero el destinatario no recibió nada.,alta
+SOL-010,2026-06-03,WhatsApp,comercio,Hotel Campestre,Desde esta mañana me están llegando pagos duplicados. Ya son más de 15 transacciones repetidas en la última hora.,baja
