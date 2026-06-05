@@ -67,6 +67,7 @@ src/
     solicitud.controller.ts   — endpoints REST
     solicitud.controller.spec.ts
     solicitud.dto.ts           — validación del body
+    solicitud.dto.spec.ts
   ingesta/
     csv.reader.ts
     csv.reader.spec.ts
@@ -299,7 +300,7 @@ Archivo generado en cada ejecución: [`datos/output.json`](./datos/output.json)
 
 Archivo de referencia estático: [`datos/output_ejemplo.json`](./datos/output_ejemplo.json)
 
-> `output_ejemplo.json` es un ejemplo parcial con 4 de las 10 solicitudes del CSV, seleccionadas para ilustrar los cuatro estados posibles: `procesada`, `requiere_revision_manual` y `fallida`. El archivo `output.json` refleja el resultado completo de la última ejecución real.
+> `output_ejemplo.json` es un ejemplo parcial con 4 de las 10 solicitudes del CSV, seleccionadas para ilustrar los tres estados posibles: `procesada`, `requiere_revision_manual` y `fallida`. El archivo `output.json` refleja el resultado completo de la última ejecución real.
 
 Campos por solicitud:
 
