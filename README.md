@@ -509,7 +509,8 @@ La colección incluye 5 solicitudes de procesamiento, 3 validaciones que deben r
 | Persistencia en BD relacional | ✅ | PostgreSQL con Prisma + migraciones |
 | Integración real | ✅ | Groq API + PostgreSQL + Slack webhook (3 integraciones) |
 | Logs y trazabilidad | ✅ | Tabla `logs_procesamiento` + consola |
-| Manejo de errores y reintentos | ✅ | `ClassifierService` con retry, estados separados |
+| Manejo de errores y reintentos (clasificador) | ✅ | `ClassifierService` con retry hasta `GROQ_MAX_RETRIES`, estados separados |
+| Manejo de errores y reintentos (respuesta) | ✅ | `ResponseService` con retry hasta `GROQ_MAX_RETRIES`, degradación a `respuesta_sugerida: null` |
 | Variables de entorno para secretos | ✅ | `.env` + `.env.example` |
 | README completo | ✅ | Este documento |
 | Archivo de entrada de ejemplo | ✅ | `datos/solicitudes.csv` |
