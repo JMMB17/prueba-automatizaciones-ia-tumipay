@@ -134,7 +134,6 @@ Archivo requerido: `.env` — ver ejemplo en [`.env.example`](./.env.example)
 | `DB_PASSWORD` | Sí | Contraseña de PostgreSQL |
 | `DB_NAME` | Sí | Nombre de la base de datos |
 | `DB_SCHEMA` | Sí | Schema de PostgreSQL |
-| `DATABASE_URL` | No | Alternativa a las variables `DB_*` individuales |
 | `GROQ_MODEL` | No | Modelo a usar (default: `llama-3.3-70b-versatile`) |
 | `GROQ_TEMPERATURE` | No | Temperatura del clasificador — usar `0` para resultados deterministas (default: `0`) |
 | `GROQ_RESPONSE_TEMPERATURE` | No | Temperatura de la respuesta sugerida — puede ser mayor para más variación (default: `0.3`) |
@@ -143,7 +142,7 @@ Archivo requerido: `.env` — ver ejemplo en [`.env.example`](./.env.example)
 | `PORT` | No | Puerto del servidor HTTP (default: `3000`) |
 | `SLACK_WEBHOOK_URL` | No | URL del Incoming Webhook de Slack para alertas de prioridad Alta. Si se omite, las notificaciones se deshabilitan silenciosamente |
 
-> **Nota sobre `prisma.config.ts`**: este archivo permite que el CLI de Prisma construya la URL de conexión desde las variables `DB_*` sin necesidad de definir `DATABASE_URL`.
+> **Nota sobre `prisma.config.ts`**: este archivo permite que el CLI de Prisma construya la URL de conexión desde las variables `DB_*`.
 
 ---
 
