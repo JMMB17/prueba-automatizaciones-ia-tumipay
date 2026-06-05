@@ -40,6 +40,8 @@ flowchart LR
   H --> J["output.json\n(solo batch)"]
 ```
 
+![Diagrama de arquitectura](./arquitectura_images/TUMIPAY_Arquitectura.png)
+
 ---
 
 ## Tecnologías Utilizadas
@@ -356,6 +358,8 @@ Almacena datos originales del CSV y resultado del LLM: `categoria`, `prioridad_f
 ### Tabla `logs_procesamiento`
 
 Registra cada etapa del procesamiento: nivel (INFO/WARN/ERROR), etapa (INGESTA/CLASIFICACION/RESPUESTA/ALMACENAMIENTO), mensaje, prompt enviado al LLM, respuesta cruda recibida e intento número. Permite auditar exactamente qué decidió el modelo en cada solicitud.
+
+![Modelo de datos](./arquitectura_images/TUMIPAY_Modelo_Datos.png)
 
 ---
 
