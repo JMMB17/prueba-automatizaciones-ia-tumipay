@@ -100,7 +100,7 @@ export class ProcessorService {
         mensaje: solicitud.mensaje,
         prioridadReportada: solicitud.prioridad_reportada,
         estadoProcesamiento: 'requiere_revision_manual',
-        razonFallo: 'Clasificación fallida tras 2 intentos',
+        razonFallo: 'Clasificación fallida tras máximo de reintentos',
       },
       update: {
         fecha: solicitud.fecha,
@@ -110,7 +110,7 @@ export class ProcessorService {
         mensaje: solicitud.mensaje,
         prioridadReportada: solicitud.prioridad_reportada,
         estadoProcesamiento: 'requiere_revision_manual',
-        razonFallo: 'Clasificación fallida tras 2 intentos',
+        razonFallo: 'Clasificación fallida tras máximo de reintentos',
       },
     });
   }

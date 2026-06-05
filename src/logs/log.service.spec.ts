@@ -87,4 +87,28 @@ describe('LogService', () => {
       expect.any(Error),
     );
   });
+
+  it('no rompe el flujo si Prisma falla al persistir un log WARN', async () => {
+    prismaMock.logProcesamiento.create.mockRejectedValueOnce(new Error('db-warn-fail'));
+    const service = new LogService(prismaMock as never);
+
+    await expect(service.warn('SOL-005', 'CLASIFICACION', 'Advertencia')).resolves.toBeUndefined();
+
+    expect(consoleErrorSpy).toHaveBeenCalledWith(
+      '[ERROR][CLASIFICACION][SOL-005] No se pudo guardar el log WARN',
+      expect.any(Error),
+    );
+  });
+
+  it('no rompe el flujo si Prisma falla al persistir un log ERROR', async () => {
+    prismaMock.logProcesamiento.create.mockRejectedValueOnce(new Error('db-error-fail'));
+    const service = new LogService(prismaMock as never);
+
+    await expect(service.error('SOL-006', 'ALMACENAMIENTO', 'Error crítico')).resolves.toBeUndefined();
+
+    expect(consoleErrorSpy).toHaveBeenCalledWith(
+      '[ERROR][ALMACENAMIENTO][SOL-006] No se pudo guardar el log ERROR',
+      expect.any(Error),
+    );
+  });
 });

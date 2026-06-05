@@ -42,6 +42,7 @@ export class ResponseService {
   private readonly prompts: Record<string, string>;
   private readonly model: string;
   private readonly temperature: number;
+  private readonly maxRetries: number;
 
   constructor() {
     const apiKey = process.env.GROQ_API_KEY;
@@ -52,6 +53,7 @@ export class ResponseService {
 
     this.model = process.env.GROQ_MODEL ?? 'llama-3.3-70b-versatile';
     this.temperature = leerNumeroEnv('GROQ_RESPONSE_TEMPERATURE', 0.3);
+    this.maxRetries = Math.max(1, leerNumeroEnv('GROQ_MAX_RETRIES', 2));
 
     this.llm = new ChatGroq({
       apiKey,
@@ -78,35 +80,49 @@ export class ResponseService {
       return null;
     }
 
-    try {
-      await logService.info(
-        solicitud.id_solicitud,
-        'RESPUESTA',
-        `Generando respuesta especializada para categoría: ${clasificacion.categoria}`,
-      );
+    const promptTemplate = ChatPromptTemplate.fromTemplate(this.prompts[clave]);
+    const chain = promptTemplate.pipe(this.llm).pipe(new StringOutputParser());
+    const variables = {
+      nombre_cliente: solicitud.nombre_cliente || 'Cliente',
+      canal: solicitud.canal || '',
+      resumen: clasificacion.resumen,
+      datos_extraidos: JSON.stringify(clasificacion.datos_extraidos, null, 2),
+      prioridad_final: clasificacion.prioridad_final,
+    };
 
-      const promptTemplate = ChatPromptTemplate.fromTemplate(this.prompts[clave]);
-      const chain = promptTemplate.pipe(this.llm).pipe(new StringOutputParser());
+    for (let intento = 1; intento <= this.maxRetries; intento++) {
+      try {
+        await logService.info(
+          solicitud.id_solicitud,
+          'RESPUESTA',
+          `Generando respuesta especializada para categoría: ${clasificacion.categoria}`,
+        );
 
-      const respuesta = await chain.invoke({
-        nombre_cliente: solicitud.nombre_cliente || 'Cliente',
-        canal: solicitud.canal || '',
-        resumen: clasificacion.resumen,
-        datos_extraidos: JSON.stringify(clasificacion.datos_extraidos, null, 2),
-        prioridad_final: clasificacion.prioridad_final,
-      });
+        const respuesta = await chain.invoke(variables);
 
-      await logService.info(
-        solicitud.id_solicitud,
-        'RESPUESTA',
-        'Respuesta especializada generada correctamente',
-      );
+        await logService.info(
+          solicitud.id_solicitud,
+          'RESPUESTA',
+          'Respuesta especializada generada correctamente',
+        );
 
-      return respuesta.replace(/\n+/g, ' ').replace(/\s+/g, ' ').trim();
-    } catch (error) {
-      const mensaje = error instanceof Error ? error.message : 'Error desconocido en ResponseService';
-      await logService.error(solicitud.id_solicitud, 'RESPUESTA', mensaje);
-      return null;
+        return respuesta.replace(/\n+/g, ' ').replace(/\s+/g, ' ').trim();
+      } catch (error) {
+        const mensaje = error instanceof Error ? error.message : 'Error desconocido en ResponseService';
+
+        if (intento < this.maxRetries) {
+          await logService.warn(
+            solicitud.id_solicitud,
+            'RESPUESTA',
+            `Error en intento ${intento}, reintentando: ${mensaje}`,
+          );
+          await new Promise((r) => setTimeout(r, 1000));
+        } else {
+          await logService.error(solicitud.id_solicitud, 'RESPUESTA', mensaje);
+        }
+      }
     }
+
+    return null;
   }
 }

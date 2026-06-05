@@ -64,6 +64,61 @@ describe('ProcessorService', () => {
     rmSync(directorioTemporal, { recursive: true, force: true });
   });
 
+  it('guarda la solicitud para revisión manual cuando el clasificador retorna null', async () => {
+    prismaMock.solicitud.upsert.mockResolvedValue({} as never);
+    const archivoCsv = join(directorioTemporal, 'solicitudes.csv');
+    writeFileSync(
+      archivoCsv,
+      [
+        'id_solicitud,fecha,canal,tipo_cliente,nombre_cliente,mensaje,prioridad_reportada',
+        'SOL-MAN,2026-06-03,web,cliente,Cliente Manual,Solicitud sin clasificar,baja',
+      ].join('\n'),
+      'utf8',
+    );
+
+    const slackMock = { notificar: jest.fn(() => Promise.resolve()) };
+    const classifierNullMock = { clasificar: jest.fn(async () => null) };
+
+    const processor = new ProcessorService(
+      prismaMock as never,
+      classifierNullMock as never,
+      responseServiceMock as never,
+      logServiceMock as never,
+      new OutputService(),
+      slackMock as never,
+    );
+
+    jest.useFakeTimers();
+    try {
+      const procesamientoPromise = processor.procesarCSV(archivoCsv);
+      await jest.runAllTimersAsync();
+      await procesamientoPromise;
+    } finally {
+      jest.useRealTimers();
+    }
+
+    const salida = JSON.parse(
+      readFileSync(join(directorioTemporal, 'datos', 'output.json'), 'utf8'),
+    );
+
+    expect(prismaMock.solicitud.upsert).toHaveBeenCalledWith(
+      expect.objectContaining({
+        create: expect.objectContaining({ estadoProcesamiento: 'requiere_revision_manual' }),
+      }),
+    );
+    expect(logServiceMock.warn).toHaveBeenCalledWith(
+      'SOL-MAN',
+      'ALMACENAMIENTO',
+      'Solicitud guardada para revisión manual',
+    );
+    expect(salida.resumen).toEqual({
+      total_procesadas: 0,
+      total_revision_manual: 1,
+      total_fallidas: 0,
+    });
+    expect(slackMock.notificar).not.toHaveBeenCalled();
+  });
+
   it('procesa, persiste y exporta la salida estructurada', async () => {
     const archivoCsv = join(directorioTemporal, 'solicitudes.csv');
     writeFileSync(

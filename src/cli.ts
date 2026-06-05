@@ -16,7 +16,7 @@ export function obtenerRutaCsv(argv: string[]): string {
   return positional ?? './datos/solicitudes.csv';
 }
 
-async function bootstrap(): Promise<void> {
+export async function bootstrap(): Promise<void> {
   const app = await NestFactory.createApplicationContext(AppModule, {
     logger: ['log', 'warn', 'error'],
   });

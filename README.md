@@ -299,6 +299,8 @@ Archivo generado en cada ejecución: [`datos/output.json`](./datos/output.json)
 
 Archivo de referencia estático: [`datos/output_ejemplo.json`](./datos/output_ejemplo.json)
 
+> `output_ejemplo.json` es un ejemplo parcial con 4 de las 10 solicitudes del CSV, seleccionadas para ilustrar los cuatro estados posibles: `procesada`, `requiere_revision_manual` y `fallida`. El archivo `output.json` refleja el resultado completo de la última ejecución real.
+
 Campos por solicitud:
 
 | Campo | Descripción |
@@ -343,7 +345,7 @@ El `ResponseService` usa LangChain para generar una respuesta elaborada según l
 | Actualización de datos | `actualizacion_datos` |
 | Otro / requiere revisión manual | `revision_manual` |
 
-Si LangChain falla, la solicitud igual se guarda como `procesada` con `respuesta_sugerida: null`.
+**Resiliencia:** si LangChain falla, reintenta hasta `GROQ_MAX_RETRIES` veces con un delay de 1 segundo entre intentos. Si todos los intentos fallan, la solicitud igual se guarda como `procesada` con `respuesta_sugerida: null`.
 
 ---
 
@@ -417,20 +419,21 @@ Registra cada etapa del procesamiento: nivel (INFO/WARN/ERROR), etapa (INGESTA/C
 
 ## Cobertura de Tests
 
-31 tests en 10 suites. Ejecutar con `npm test`.
+52 tests en 11 suites. Ejecutar con `npm test`.
 
 | Suite | Qué valida |
 |---|---|
 | `csv.reader.spec.ts` | Separación válidas/inválidas, detección de campos vacíos, CSV vacío, archivo inexistente |
-| `classifier.service.spec.ts` | Configuración desde env vars, parseo de JSON, reintentos ante respuesta inválida |
-| `response.service.spec.ts` | Selección de prompt por categoría, configuración desde env vars |
-| `log.service.spec.ts` | Persistencia de logs INFO/WARN/ERROR, metadatos extra, falla silenciosa de Prisma |
+| `classifier.service.spec.ts` | Configuración desde env vars, parseo de JSON, reintentos ante respuesta inválida, categoría y prioridad inválidas, resumen vacío, error de red |
+| `response.service.spec.ts` | Selección de prompt por categoría, configuración desde env vars, prompt faltante, temperatura y modelo por defecto |
+| `log.service.spec.ts` | Persistencia de logs INFO/WARN/ERROR, metadatos extra, falla silenciosa de Prisma en warn y error |
 | `output.service.spec.ts` | Escritura del JSON final, estructura esperada |
-| `processor.service.spec.ts` | Flujo completo con fila válida e inválida, upsert en Prisma, salida consolidada |
+| `processor.service.spec.ts` | Flujo completo con fila válida e inválida, solicitud para revisión manual, upsert en Prisma, salida consolidada |
 | `solicitud.controller.spec.ts` | POST con campos completos y opcionales, GET con y sin filtro, GET 404 |
+| `solicitud.dto.spec.ts` | Decorador `@Transform` en `prioridad_reportada`: normalización a minúsculas y valor no-string sin modificar |
 | `slack.service.spec.ts` | Sin URL no llama fetch, body correcto, degradación silenciosa ante fallo de red |
-| `prisma.service.spec.ts` | Prioridad de `DATABASE_URL` sobre variables individuales |
-| `cli.spec.ts` | Resolución de `--file=`, argumento posicional, ruta por defecto |
+| `prisma.service.spec.ts` | Prioridad de `DATABASE_URL` sobre variables individuales, valores por defecto, ciclo de vida del módulo |
+| `cli.spec.ts` | Resolución de `--file=`, argumento posicional, ruta por defecto, bootstrap completo |
 
 ---
 

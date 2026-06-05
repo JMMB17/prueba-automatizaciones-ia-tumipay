@@ -1,3 +1,6 @@
+import { mkdtempSync, mkdirSync, writeFileSync, rmSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
 import { afterEach, beforeEach, describe, expect, it, jest } from '@jest/globals';
 import { ClassifierService } from './classifier.service.js';
 
@@ -140,6 +143,197 @@ describe('ClassifierService', () => {
     expect(resultado).not.toBeNull();
     expect(resultado?.categoria).toBe('Conciliación / pagos');
     expect(resultado?.prioridad_final).toBe('Alta');
+  });
+
+  it('lanza error si GROQ_API_KEY no está definida', () => {
+    process.env = { ...envOriginal };
+    delete process.env.GROQ_API_KEY;
+    expect(() => new ClassifierService()).toThrow('GROQ_API_KEY is required');
+  });
+
+  it('lanza error si el prompt de clasificación no está en el YAML', () => {
+    const tmpDir = mkdtempSync(join(tmpdir(), 'tumi-classifier-'));
+    mkdirSync(join(tmpDir, 'prompts'));
+    writeFileSync(join(tmpDir, 'prompts', 'respuestas.yaml'), 'otro_prompt: "Hola"');
+    const originalCwd = process.cwd();
+    process.chdir(tmpDir);
+    try {
+      expect(() => new ClassifierService()).toThrow(
+        'No se encontró el prompt de clasificación en prompts/respuestas.yaml',
+      );
+    } finally {
+      process.chdir(originalCwd);
+      rmSync(tmpDir, { recursive: true, force: true });
+    }
+  });
+
+  it('usa el valor por defecto de leerNumeroEnv cuando la variable de entorno no está definida', () => {
+    process.env = {
+      ...envOriginal,
+      GROQ_API_KEY: 'test-api-key',
+      GROQ_MODEL: 'test-model',
+    };
+    delete process.env.GROQ_MAX_TOKENS;
+    delete process.env.GROQ_TEMPERATURE;
+    delete process.env.GROQ_MAX_RETRIES;
+
+    const service = crearServicioConClienteFalso();
+    expect(service).toBeDefined();
+  });
+
+  it('reintenta cuando el modelo devuelve una categoría inválida y termina en null', async () => {
+    mockCreateCompletion.mockResolvedValue({
+      choices: [
+        {
+          message: {
+            content: JSON.stringify({
+              categoria: 'Categoria Inventada',
+              prioridad_final: 'Alta',
+              justificacion_prioridad: 'Justificacion',
+              resumen: 'Resumen válido',
+              datos_extraidos: {},
+            }),
+          },
+        },
+      ],
+    });
+
+    jest.useFakeTimers();
+    const service = crearServicioConClienteFalso();
+    const resultadoPromise = service.clasificar(
+      {
+        id_solicitud: 'SOL-003',
+        fecha: '2026-06-03',
+        canal: 'web',
+        tipo_cliente: 'cliente',
+        nombre_cliente: 'Cliente Tres',
+        mensaje: 'Mensaje de prueba',
+        prioridad_reportada: 'baja',
+      },
+      logServiceMock as never,
+    );
+    await jest.runAllTimersAsync();
+    const resultado = await resultadoPromise;
+
+    expect(mockCreateCompletion).toHaveBeenCalledTimes(2);
+    expect(logServiceMock.warn).toHaveBeenCalledWith(
+      'SOL-003',
+      'CLASIFICACION',
+      expect.stringContaining('Categoría inválida'),
+    );
+    expect(resultado).toBeNull();
+    jest.useRealTimers();
+  });
+
+  it('retorna null cuando el modelo devuelve resumen vacío', async () => {
+    mockCreateCompletion.mockResolvedValue({
+      choices: [
+        {
+          message: {
+            content: JSON.stringify({
+              categoria: 'Soporte técnico',
+              prioridad_final: 'Media',
+              justificacion_prioridad: 'Justificacion',
+              resumen: '   ',
+              datos_extraidos: {},
+            }),
+          },
+        },
+      ],
+    });
+
+    jest.useFakeTimers();
+    const service = crearServicioConClienteFalso();
+    const resultadoPromise = service.clasificar(
+      {
+        id_solicitud: 'SOL-004',
+        fecha: '2026-06-03',
+        canal: 'api',
+        tipo_cliente: 'comercio',
+        nombre_cliente: 'Cliente Cuatro',
+        mensaje: 'Solicitud sin resumen',
+        prioridad_reportada: '',
+      },
+      logServiceMock as never,
+    );
+    await jest.runAllTimersAsync();
+    const resultado = await resultadoPromise;
+
+    expect(logServiceMock.warn).toHaveBeenCalledWith(
+      'SOL-004',
+      'CLASIFICACION',
+      'Resumen vacío',
+    );
+    expect(resultado).toBeNull();
+    jest.useRealTimers();
+  });
+
+  it('retorna null cuando el modelo devuelve una prioridad inválida tras reintentos', async () => {
+    mockCreateCompletion.mockResolvedValue({
+      choices: [
+        {
+          message: {
+            content: JSON.stringify({
+              categoria: 'Soporte técnico',
+              prioridad_final: 'Urgentísima',
+              justificacion_prioridad: 'Muy urgente',
+              resumen: 'Resumen válido',
+              datos_extraidos: {},
+            }),
+          },
+        },
+      ],
+    });
+
+    jest.useFakeTimers();
+    const service = crearServicioConClienteFalso();
+    const resultadoPromise = service.clasificar(
+      {
+        id_solicitud: 'SOL-PRI',
+        fecha: '2026-06-03',
+        canal: 'correo',
+        tipo_cliente: 'cliente',
+        nombre_cliente: 'Cliente Prioridad',
+        mensaje: 'Prioridad inválida',
+        prioridad_reportada: '',
+      },
+      logServiceMock as never,
+    );
+    await jest.runAllTimersAsync();
+    const resultado = await resultadoPromise;
+
+    expect(logServiceMock.warn).toHaveBeenCalledWith(
+      'SOL-PRI',
+      'CLASIFICACION',
+      expect.stringContaining('Prioridad inválida'),
+    );
+    expect(resultado).toBeNull();
+    jest.useRealTimers();
+  });
+
+  it('retorna null y registra el error cuando el SDK de Groq lanza una excepción', async () => {
+    mockCreateCompletion.mockRejectedValue(new Error('Network timeout'));
+
+    const service = crearServicioConClienteFalso();
+    const resultado = await service.clasificar(
+      {
+        id_solicitud: 'SOL-005',
+        fecha: '2026-06-03',
+        canal: 'api',
+        tipo_cliente: 'cliente',
+        nombre_cliente: 'Cliente Cinco',
+        mensaje: 'Mensaje con error de red',
+        prioridad_reportada: '',
+      },
+      logServiceMock as never,
+    );
+
+    expect(logServiceMock.error).toHaveBeenCalledWith(
+      'SOL-005',
+      'CLASIFICACION',
+      'Network timeout',
+    );
+    expect(resultado).toBeNull();
   });
 
   it('reintenta cuando el JSON es inválido y termina en null', async () => {

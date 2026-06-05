@@ -7,50 +7,52 @@
   "solicitudes": [
     {
       "id_solicitud": "SOL-001",
-      "categoria": "Riesgo / fraude",
+      "categoria": "Soporte técnico",
       "prioridad_final": "Alta",
-      "resumen": "El comercio detectó transacciones no reconocidas con valores altos y solicita bloqueo urgente de pagos",
+      "resumen": "Error 503 al acceder al portal de pagos",
       "datos_extraidos": {
-        "tipo_transaccion": "transacciones no reconocidas",
-        "accion_solicitada": "bloqueo urgente"
+        "tipo_de_error": "Error 503",
+        "fecha_de_inicio": "Ayer",
+        "tipo_de_cliente": "Comercio",
+        "nombre_del_comercio": "Supermercado La 14"
       },
-      "respuesta_sugerida": "Estimado cliente, recibimos su reporte de seguridad y fue escalado de inmediato al equipo de fraude. El equipo iniciará el proceso de bloqueo preventivo de su cuenta para evitar movimientos adicionales, por lo que le pedimos que no realice ninguna transacción hasta recibir confirmación. Un especialista en seguridad lo contactará en menos de 30 minutos. Puede responder por este mismo canal si necesita asistencia inmediata.",
+      "respuesta_sugerida": "Estimado Supermercado La 14, confirmamos que recibimos su reporte sobre el error 503 al acceder al portal de pagos y lo estamos atendiendo de inmediato. Debido a que la prioridad de su caso es Alta, un técnico lo contactará en menos de 1 hora para resolver el problema. Mientras tanto, le sugerimos intentar reiniciar la sesión y limpiar el caché. Si necesita seguimiento, puede comunicarse por este mismo canal.",
       "estado_procesamiento": "procesada",
-      "fecha_procesamiento": "2026-06-01T14:30:00.000Z"
-    },
-    {
-      "id_solicitud": "SOL-002",
-      "categoria": "Conciliación / pagos",
-      "prioridad_final": "Alta",
-      "resumen": "Transferencia exitosa según comprobante pero el destinatario no recibió el dinero después de 3 días",
-      "datos_extraidos": {
-        "tipo_transaccion": "transferencia",
-        "estado_comprobante": "exitoso",
-        "dias_transcurridos": 3
-      },
-      "respuesta_sugerida": "Estimada cliente, confirmamos que recibimos su reporte de discrepancia en pagos. Debido a la prioridad alta, hemos escalado el asunto y lo revisaremos en menos de 2 horas. Para agilizar el proceso, le solicitamos que tenga a mano el número de referencia, la fecha de la transacción y el comprobante si lo tiene disponible.",
-      "estado_procesamiento": "procesada",
-      "fecha_procesamiento": "2026-06-01T14:31:00.000Z"
+      "fecha_procesamiento": "2026-06-04T19:44:00.395Z"
     },
     {
       "id_solicitud": "SOL-003",
+      "categoria": "Riesgo / fraude",
+      "prioridad_final": "Alta",
+      "resumen": "El comercio Restaurante El Patio detectó transacciones no reconocidas y solicita bloqueo de pagos",
+      "datos_extraidos": {
+        "nombre_comercio": "Restaurante El Patio",
+        "tipo_transaccion": "transacciones desconocidas",
+        "accion_solicitada": "bloqueo de pagos"
+      },
+      "respuesta_sugerida": "Estimado Restaurante El Patio, recibimos su reporte de seguridad y fue escalado de inmediato al equipo de fraude. Hemos iniciado el proceso de bloqueo preventivo de su cuenta para evitar movimientos adicionales; le pedimos que no realice ninguna transacción hasta recibir confirmación. Un especialista en seguridad lo contactará en menos de 30 minutos.",
+      "estado_procesamiento": "procesada",
+      "fecha_procesamiento": "2026-06-04T19:44:04.864Z"
+    },
+    {
+      "id_solicitud": "SOL-005",
       "categoria": null,
       "prioridad_final": null,
       "resumen": null,
       "datos_extraidos": {},
       "respuesta_sugerida": null,
       "estado_procesamiento": "requiere_revision_manual",
-      "fecha_procesamiento": "2026-06-01T14:32:00.000Z"
+      "fecha_procesamiento": "2026-06-04T19:44:08.973Z"
     },
     {
-      "id_solicitud": "SOL-004",
+      "id_solicitud": "SOL-008",
       "categoria": null,
       "prioridad_final": null,
       "resumen": null,
       "datos_extraidos": {},
       "respuesta_sugerida": null,
       "estado_procesamiento": "fallida",
-      "fecha_procesamiento": "2026-06-01T14:32:00.000Z"
+      "fecha_procesamiento": "2026-06-04T19:44:00.287Z"
     }
   ]
 }

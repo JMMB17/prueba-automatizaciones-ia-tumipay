@@ -78,6 +78,104 @@ describe('ResponseService', () => {
     expect(respuesta).toContain('Cliente Uno');
   });
 
+  it('reintenta cuando falla y retorna null si agotan los intentos', async () => {
+    process.env = {
+      ...envOriginal,
+      GROQ_API_KEY: 'test-api-key',
+      GROQ_MODEL: 'test-response-model',
+      GROQ_MAX_RETRIES: '2',
+    };
+
+    jest.useFakeTimers();
+    const service = new ResponseService() as unknown as ResponseServiceInspectable;
+
+    let llamadas = 0;
+    service.llm = new RunnableLambda<unknown, string>({
+      func: async () => {
+        llamadas++;
+        throw new Error('LangChain timeout');
+      },
+    });
+
+    const respuestaPromise = service.generarRespuesta(
+      {
+        id_solicitud: 'SOL-002',
+        fecha: '2026-06-03',
+        canal: 'api',
+        tipo_cliente: 'comercio',
+        nombre_cliente: 'Comercio Test',
+        mensaje: 'Error al procesar pago',
+        prioridad_reportada: 'media',
+      },
+      {
+        categoria: 'Soporte técnico',
+        prioridad_final: 'Media',
+        justificacion_prioridad: 'Error técnico',
+        resumen: 'Error al procesar pago',
+        datos_extraidos: {},
+      },
+      logServiceMock,
+    );
+    await jest.runAllTimersAsync();
+    const respuesta = await respuestaPromise;
+
+    expect(respuesta).toBeNull();
+    expect(llamadas).toBe(2);
+    expect(warnMock).toHaveBeenCalledWith('SOL-002', 'RESPUESTA', expect.stringContaining('reintentando'));
+    expect(errorMock).toHaveBeenCalledWith('SOL-002', 'RESPUESTA', 'LangChain timeout');
+    jest.useRealTimers();
+  });
+
+  it('retorna null y registra warning cuando no hay prompt para la categoría', async () => {
+    const service = new ResponseService() as unknown as ResponseServiceInspectable;
+
+    const respuesta = await service.generarRespuesta(
+      {
+        id_solicitud: 'SOL-003',
+        fecha: '2026-06-03',
+        canal: 'web',
+        tipo_cliente: 'cliente',
+        nombre_cliente: 'Cliente Tres',
+        mensaje: 'Mensaje de prueba',
+        prioridad_reportada: '',
+      },
+      {
+        categoria: 'Categoría Inexistente',
+        prioridad_final: 'Alta',
+        justificacion_prioridad: 'Urgente',
+        resumen: 'Resumen',
+        datos_extraidos: {},
+      },
+      logServiceMock,
+    );
+
+    expect(respuesta).toBeNull();
+    expect(warnMock).toHaveBeenCalledWith(
+      'SOL-003',
+      'RESPUESTA',
+      'No se encontró prompt para categoría: Categoría Inexistente',
+    );
+  });
+
+  it('usa el modelo por defecto cuando GROQ_MODEL no está definido', () => {
+    process.env = { ...envOriginal, GROQ_API_KEY: 'test-api-key' };
+    delete process.env.GROQ_MODEL;
+
+    const service = new ResponseService() as unknown as ResponseServiceInspectable;
+    expect(service.model).toBe('llama-3.3-70b-versatile');
+  });
+
+  it('usa la temperatura por defecto si GROQ_RESPONSE_TEMPERATURE no es un número válido', () => {
+    process.env = {
+      ...envOriginal,
+      GROQ_API_KEY: 'test-api-key',
+      GROQ_RESPONSE_TEMPERATURE: 'no-es-numero',
+    };
+
+    const service = new ResponseService() as unknown as ResponseServiceInspectable;
+    expect(service.temperature).toBe(0.3);
+  });
+
   it('requiere GROQ_API_KEY para inicializarse', () => {
     process.env = {
       ...envOriginal,

@@ -1,5 +1,17 @@
-import { afterEach, beforeEach, describe, expect, it } from '@jest/globals';
-import { construirConnectionString } from './prisma.service.js';
+import { afterEach, beforeEach, describe, expect, it, jest } from '@jest/globals';
+import { construirConnectionString, PrismaService } from './prisma.service.js';
+
+jest.mock('@prisma/adapter-pg', () => ({
+  PrismaPg: jest.fn().mockImplementation(() => ({})),
+}));
+
+jest.mock('../generated/prisma/client.js', () => ({
+  PrismaClient: class PrismaClient {
+    $connect = jest.fn().mockResolvedValue(undefined);
+    $disconnect = jest.fn().mockResolvedValue(undefined);
+    constructor(_opts?: unknown) {}
+  },
+}));
 
 describe('construirConnectionString', () => {
   const envOriginal = { ...process.env };
@@ -37,5 +49,36 @@ describe('construirConnectionString', () => {
     expect(construirConnectionString()).toBe(
       'postgresql://postgres:password@localhost:5432/tumipay?schema=public',
     );
+  });
+
+  it('usa valores por defecto cuando no hay ninguna variable de entorno definida', () => {
+    delete process.env.DATABASE_URL;
+    delete process.env.DB_HOST;
+    delete process.env.DB_PORT;
+    delete process.env.DB_USER;
+    delete process.env.DB_PASSWORD;
+    delete process.env.DB_NAME;
+    delete process.env.DB_SCHEMA;
+
+    expect(construirConnectionString()).toBe(
+      'postgresql://postgres:postgres@localhost:5432/tumipay?schema=public',
+    );
+  });
+});
+
+describe('PrismaService', () => {
+  it('puede instanciarse correctamente', () => {
+    const service = new PrismaService();
+    expect(service).toBeDefined();
+  });
+
+  it('conecta a la base de datos en onModuleInit', async () => {
+    const service = new PrismaService();
+    await expect(service.onModuleInit()).resolves.toBeUndefined();
+  });
+
+  it('desconecta de la base de datos en onModuleDestroy', async () => {
+    const service = new PrismaService();
+    await expect(service.onModuleDestroy()).resolves.toBeUndefined();
   });
 });
